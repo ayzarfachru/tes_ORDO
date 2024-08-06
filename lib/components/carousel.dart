@@ -7,7 +7,7 @@ import 'package:test_ordo/utils/custom_button.dart';
 import 'package:test_ordo/utils/custom_color.dart';
 import 'package:test_ordo/utils/custom_size.dart';
 import 'package:test_ordo/utils/custom_text.dart';
-import 'package:test_ordo/view_model/carousel_view_model.dart';
+import 'package:test_ordo/view_model/home_view_model.dart';
 
 class CarouselComponent extends StatefulWidget {
   const CarouselComponent({Key? key}) : super(key: key);
@@ -32,9 +32,9 @@ class _CarouselComponentState extends State<CarouselComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CarouselViewModel>(
-      create: (_) => CarouselViewModel(),
-      child: Consumer<CarouselViewModel>(builder: (context, viewModel, child) {
+    return ChangeNotifierProvider<HomeViewModel>(
+      create: (_) => HomeViewModel(),
+      child: Consumer<HomeViewModel>(builder: (context, viewModel, child) {
         return Center(
           child: Column(
             children: [

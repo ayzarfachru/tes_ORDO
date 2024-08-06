@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:test_ordo/utils/custom_menu.dart';
+import 'package:test_ordo/view_model/home_view_model.dart';
 
 import 'menu_item.dart';
 
@@ -12,7 +14,6 @@ class MenuComponent extends StatefulWidget {
 }
 
 class _MenuComponentState extends State<MenuComponent> {
-  double value = 1.0;
 
   @override
   void initState() {
@@ -21,91 +22,39 @@ class _MenuComponentState extends State<MenuComponent> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                    onTap: () {
+    return ChangeNotifierProvider<HomeViewModel>(
+        create: (_) => HomeViewModel(),
+        child: Consumer<HomeViewModel>(builder: (context, viewModel, child) {
+          return GridView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: viewModel.menuData.length,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 20
+              ),
+              itemBuilder: (ctx, index) {
+                return Center(
+                  child: GestureDetector(
+                    onTap: (){
                       showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
                           backgroundColor: Colors.white,
                           builder: (context) {
-                            return const MenuPemesananComponent();
+                            return MenuItemComponent(viewModel.menuData[index]);
                           });
                     },
                     child: CustomMenu.customMenu(
                         context: context,
-                        text: 'Pemesanan',
-                        value: 1.0,
-                        image: 'assets/menu/house_menu.png')),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-                        builder: (context) {
-                          return const MenuAdministrasiComponent();
-                        });
-                  },
-                  child: CustomMenu.customMenu(
-                      context: context,
-                      text: 'Administrasi',
-                      value: 0.5,
-                      image: 'assets/menu/book_menu.png'),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-                        builder: (context) {
-                          return const MenuPembangunanComponent();
-                        });
-                  },
-                  child: CustomMenu.customMenu(
-                      context: context,
-                      text: 'Pembangunan',
-                      value: 0.0,
-                      image: 'assets/menu/house2_menu.png'),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.white,
-                        builder: (context) {
-                          return const MenuAkadComponent();
-                        });
-                  },
-                  child: CustomMenu.customMenu(
-                      context: context,
-                      text: 'Akad & Serah Terima',
-                      value: 0.0,
-                      image: 'assets/menu/door_menu.png'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ],
-    ));
+                        text: viewModel.menuData[index].text,
+                        value: viewModel.menuData[index].value,
+                        image: viewModel.menuData[index].image),
+                  ),
+                );
+              });
+        }));
   }
 }
